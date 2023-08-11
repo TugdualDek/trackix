@@ -13,6 +13,7 @@ import java.util.Optional;
 public class MailService {
 
     private final MailRepository mailRepository;
+    private final String LINK_URL = "http://137.74.196.178:8000/";
 
 
     public MailService(MailRepository mailRepository) {
@@ -116,7 +117,7 @@ public class MailService {
     public Object generateLink(int id) {
         Optional<MailTrack> mailTrack = mailRepository.findById(id);
         mailTrack.ifPresent(mailTrack1 -> {
-            mailTrack1.setLink("http://localhost:8080/track/mail/" + mailTrack1.getId());
+            mailTrack1.setLink(LINK_URL + "/track/mail/" + mailTrack1.getId());
             mailRepository.save(mailTrack1);
         });
         return mailTrack;

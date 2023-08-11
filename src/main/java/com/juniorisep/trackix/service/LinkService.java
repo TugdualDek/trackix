@@ -13,6 +13,7 @@ import java.util.Optional;
 public class LinkService {
 
     private final LinkRepository linkRepository;
+    private final String LINK_URL = "http://137.74.196.178:8000/";
 
     public LinkService(LinkRepository linkRepository) {
         this.linkRepository = linkRepository;
@@ -108,7 +109,7 @@ public class LinkService {
     public Object generateLink(int id) {
         Optional<LinkTrack> linkTrack = linkRepository.findById(id);
         linkTrack.ifPresent(mailTrack1 -> {
-            mailTrack1.setLink("http://localhost:8080/track/redirect/" + mailTrack1.getId());
+            mailTrack1.setLink(LINK_URL + "/track/redirect/" + mailTrack1.getId());
             linkRepository.save(mailTrack1);
         });
         return linkTrack;
