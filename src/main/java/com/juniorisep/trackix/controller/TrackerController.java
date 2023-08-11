@@ -37,7 +37,7 @@ public class TrackerController {
         this.dataLinkService = dataLinkService;
     }
 
-    @GetMapping("/mail/{id}")
+    @GetMapping("/mail/{id}.gif")
     public ResponseEntity<byte[]> trackCampaign(@PathVariable("id") int id, HttpServletRequest request) {
 
         Optional<MailTrack> mail = mailService.getCampaignById(id);
