@@ -13,7 +13,7 @@ import java.util.Optional;
 public class LinkService {
 
     private final LinkRepository linkRepository;
-    private final String LINK_URL = "http://137.74.196.178:8000/";
+    private final String LINK_URL = "http://137.74.196.178:8000";
 
     public LinkService(LinkRepository linkRepository) {
         this.linkRepository = linkRepository;
