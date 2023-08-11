@@ -1,3 +1,7 @@
-FROM maven:3.9.1-eclipse-temurin-20
+FROM amazoncorretto:17-alpine3.17
 
-COPY / /
+# on copie le jar généré
+COPY target/trackix-0.0.1-SNAPSHOT.jar /app.jar
+
+# Commande pour exécuter l'application Spring Boot
+CMD ["java", "-jar", "/app.jar"]
