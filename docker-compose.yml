@@ -1,0 +1,45 @@
+version: '3.4'
+
+services:
+  db:
+    container_name: db
+    image: postgres:latest
+    networks:
+      - trackix
+    volumes:
+      - db:/var/lib/postgresql/data
+    expose:
+      - "5432"
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_USER: postgres
+      POSTGRES_DB: trackix
+    restart: unless-stopped
+
+  trackixback:
+    image: trackixback
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - "8000:8000"
+    networks:
+      - trackix
+    environment:
+      DB_HOST: db
+      DB_USERNAME: postgres
+      DB_PASSWORD: password
+    depends_on:
+      - db
+    command: mvn clean install spring-boot:run -Dmaven.test.skip=true
+    restart: unless-stopped
+
+volumes:
+  db:
+    name: trackix
+
+networks:
+  trackix:
+    driver: bridge

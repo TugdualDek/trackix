@@ -1,0 +1,50 @@
+stages:
+  - build
+  - docker
+  - deploy
+
+# BUILD STAGE
+build-main:
+  stage: build
+  image: maven:3.9.3-eclipse-temurin-17
+  script:
+    - mvn clean install -Dmaven.test.skip=true
+  artifacts:
+    paths:
+      - target/
+  only:
+    - master
+
+# DOCKER STAGE
+docker-main:
+  stage: docker
+  image: docker:latest
+  before_script:
+    - echo "$DOCKER_PASSWORD" | docker login --username $DOCKER_USERNAME --password-stdin registry.dev.juniorisep.com
+  script:
+    - docker build --tag registry.dev.juniorisep.com/trackix/trackix-back:main .
+    - docker push registry.dev.juniorisep.com/trackix/trackix-back:main
+  dependencies:
+    - build-main
+  only:
+    - master
+
+# DEPLOY STAGE
+deploy-main:
+  stage: deploy
+  before_script:
+    - "which ssh-agent || (apk update && apk add openssh-client bash curl)"
+    - mkdir -p ~/.ssh
+    - eval $(ssh-agent -s)
+    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+  script:
+    - bash -c "ssh-add <(echo \"$SSH_PRIVATE_KEY\")"
+    - export COMPOSE_HTTP_TIMEOUT=200
+    - ssh debian@$HOST "docker compose -f ~/docker-compose.yml down --remove-orphans"
+    - ssh debian@$HOST "docker compose -f ~/docker-compose.yml pull"
+    - ssh debian@$HOST "docker compose -f ~/docker-compose.yml up -d"
+  dependencies:
+    - build-main
+  only:
+    - master
+    
