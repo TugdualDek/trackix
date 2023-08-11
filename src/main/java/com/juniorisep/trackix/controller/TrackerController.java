@@ -146,17 +146,17 @@ public class TrackerController {
 
     @PostMapping("/send")
     public void sendMail(@RequestBody MailRequest mailDto) throws MessagingException, UnsupportedEncodingException {
-        sendHtmlMessage(mailDto.getTo(), mailDto.getFrom(), mailDto.getBody(), mailDto.getFrom());
+        sendHtmlMessage(mailDto.getTo(), mailDto.getSubject(), mailDto.getBody(), mailDto.getFrom());
     }
 
     public void sendHtmlMessage(String to, String subject, String htmlBody, String from) throws MessagingException, UnsupportedEncodingException {
         MimeMessage message = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true);
-        helper.setFrom(new InternetAddress("spoofed-email@example.com", "Spoofed Sender Name"));
+        helper.setFrom(new InternetAddress("do-not-reply@juniorisep.fr", "JuniorISEP"));
         helper.setTo(to);
         helper.setSubject(subject);
         helper.setText(htmlBody, true);
-        helper.setReplyTo(new InternetAddress("spoofed-email@example.com", "Spoofed Sender Name"));
+        helper.setReplyTo(new InternetAddress("do-not-reply@juniorisep.fr", "JuniorISEP"));
         javaMailSender.send(message);
     }
 
