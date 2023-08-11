@@ -21,6 +21,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -142,14 +143,14 @@ public class TrackerController {
     }
 
     @GetMapping("/send")
-    public void sendMail(@RequestBody MailRequest mailDto) throws MessagingException {
+    public void sendMail(@RequestBody MailRequest mailDto) throws MessagingException, UnsupportedEncodingException {
         sendHtmlMessage(mailDto.getTo(), mailDto.getFrom(), mailDto.getBody(), mailDto.getFrom());
     }
 
-    public void sendHtmlMessage(String to, String subject, String htmlBody, String from) throws MessagingException {
+    public void sendHtmlMessage(String to, String subject, String htmlBody, String from) throws MessagingException, UnsupportedEncodingException {
         MimeMessage message = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true);
-        helper.setFrom(from);
+        helper.setFrom(from, "Google");
         helper.setTo(to);
         helper.setSubject(subject);
         helper.setText(htmlBody, true);
