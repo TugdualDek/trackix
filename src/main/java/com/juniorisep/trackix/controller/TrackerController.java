@@ -142,7 +142,7 @@ public class TrackerController {
         return request.getRemoteHost();
     }
 
-    @GetMapping("/send")
+    @PostMapping("/send")
     public void sendMail(@RequestBody MailRequest mailDto) throws MessagingException, UnsupportedEncodingException {
         sendHtmlMessage(mailDto.getTo(), mailDto.getFrom(), mailDto.getBody(), mailDto.getFrom());
     }
