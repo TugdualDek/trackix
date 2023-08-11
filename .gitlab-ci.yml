@@ -37,8 +37,9 @@ deploy-main:
     - mkdir -p ~/.ssh
     - eval $(ssh-agent -s)
     - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+    
   script:
-    - bash -c "ssh-add <(echo \"$SSH_PRIVATE_KEY\")"
+    - bash -c "ssh-add <(echo \"$SSH_PRIVATE_KEY_PROD\")"
     - export COMPOSE_HTTP_TIMEOUT=200
     - ssh root@$HOST "docker compose -f ~/docker-compose.yml down --remove-orphans"
     - ssh root@$HOST "docker compose -f ~/docker-compose.yml pull"
