@@ -83,7 +83,7 @@ public class TrackerController {
 
         }
 
-        Resource resource = new ClassPathResource("static/transparent.png");
+        Resource resource = new ClassPathResource("static/1x1.png");
         byte[] imageBytes = FileUtils.readFileToByteArray(resource.getFile());
 
         HttpHeaders headers = new HttpHeaders();
