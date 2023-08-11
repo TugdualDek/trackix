@@ -1,21 +1,24 @@
 package com.juniorisep.trackix.controller;
 
+import com.juniorisep.trackix.dto.MailRequest;
 import com.juniorisep.trackix.model.LinkTrack;
 import com.juniorisep.trackix.model.MailTrack;
 import com.juniorisep.trackix.service.DataLinkService;
 import com.juniorisep.trackix.service.LinkService;
 import com.juniorisep.trackix.service.MailService;
 import com.juniorisep.trackix.service.DataMailService;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -29,6 +32,9 @@ public class TrackerController {
     private final DataMailService dataMailService;
     private final LinkService linkService;
     private final DataLinkService dataLinkService;
+
+    @Autowired
+    private JavaMailSender javaMailSender;
 
     public TrackerController(MailService mailService, DataMailService dataMailService, LinkService linkService, DataLinkService dataLinkService) {
         this.mailService = mailService;
@@ -133,6 +139,21 @@ public class TrackerController {
 
     public String extractClientHostname(HttpServletRequest request) {
         return request.getRemoteHost();
+    }
+
+    @GetMapping("/send")
+    public void sendMail(@RequestBody MailRequest mailDto) throws MessagingException {
+        sendHtmlMessage(mailDto.getTo(), mailDto.getFrom(), mailDto.getBody(), mailDto.getFrom());
+    }
+
+    public void sendHtmlMessage(String to, String subject, String htmlBody, String from) throws MessagingException {
+        MimeMessage message = javaMailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message, true);
+        helper.setFrom(from);
+        helper.setTo(to);
+        helper.setSubject(subject);
+        helper.setText(htmlBody, true);
+        javaMailSender.send(message);
     }
 
 }
