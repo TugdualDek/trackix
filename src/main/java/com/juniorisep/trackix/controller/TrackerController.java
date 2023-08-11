@@ -8,10 +8,14 @@ import com.juniorisep.trackix.service.LinkService;
 import com.juniorisep.trackix.service.MailService;
 import com.juniorisep.trackix.service.DataMailService;
 import jakarta.mail.MessagingException;
+import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -44,8 +48,8 @@ public class TrackerController {
         this.dataLinkService = dataLinkService;
     }
 
-    @GetMapping("/mail/{id}.gif")
-    public ResponseEntity<byte[]> trackCampaign(@PathVariable("id") int id, HttpServletRequest request) {
+    @GetMapping("/mail/{id}-transparent.png")
+    public ResponseEntity<byte[]> trackCampaign(@PathVariable("id") int id, HttpServletRequest request) throws IOException {
 
         Optional<MailTrack> mail = mailService.getCampaignById(id);
 
@@ -60,9 +64,11 @@ public class TrackerController {
                 //get the user agent from the request
                 String userAgent = extractUserAgent(request);
                 System.out.println("User-Agent: " + userAgent);
+
                 //get the client ip address from the request
                 String clientIpAddress = extractClientIpAddress(request);
                 System.out.println("Client IP Address: " + clientIpAddress);
+
                 //get the remote host from the request
                 String remoteHost = extractClientHostname(request);
                 System.out.println("Remote Host: " + remoteHost);
@@ -77,22 +83,15 @@ public class TrackerController {
 
         }
 
-        byte[] transparentGif = new byte[]{
-                (byte) 0x47, (byte) 0x49, (byte) 0x46, (byte) 0x38, (byte) 0x39, (byte) 0x61,
-                (byte) 0x01, (byte) 0x00, (byte) 0x01, (byte) 0x00, (byte) 0x80, (byte) 0x01,
-                (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x21,
-                (byte) 0xF9, (byte) 0x04, (byte) 0x01, (byte) 0x00, (byte) 0x00, (byte) 0x00,
-                (byte) 0x00, (byte) 0x2C, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00,
-                (byte) 0x01, (byte) 0x00, (byte) 0x01, (byte) 0x00, (byte) 0x00, (byte) 0x01,
-                (byte) 0x01, (byte) 0x00, (byte) 0x3B
-        };
+        Resource resource = new ClassPathResource("static/transparent.png");
+        byte[] imageBytes = FileUtils.readFileToByteArray(resource.getFile());
 
         HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.IMAGE_GIF);
+        headers.setContentType(MediaType.IMAGE_PNG);
 
         return ResponseEntity.ok()
                 .headers(headers)
-                .body(transparentGif);
+                .body(imageBytes);
     }
 
     @GetMapping("/redirect/{id}")
@@ -150,10 +149,11 @@ public class TrackerController {
     public void sendHtmlMessage(String to, String subject, String htmlBody, String from) throws MessagingException, UnsupportedEncodingException {
         MimeMessage message = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true);
-        helper.setFrom(from, "Google");
+        helper.setFrom(new InternetAddress("spoofed-email@example.com", "Spoofed Sender Name"));
         helper.setTo(to);
         helper.setSubject(subject);
         helper.setText(htmlBody, true);
+        helper.setReplyTo(new InternetAddress("spoofed-email@example.com", "Spoofed Sender Name"));
         javaMailSender.send(message);
     }
 
