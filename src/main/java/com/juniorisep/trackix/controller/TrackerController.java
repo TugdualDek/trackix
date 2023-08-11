@@ -12,10 +12,7 @@ import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -23,7 +20,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.web.bind.annotation.*;
-
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
@@ -48,12 +44,12 @@ public class TrackerController {
         this.dataLinkService = dataLinkService;
     }
 
-    @GetMapping("/mail/{id}-transparent.png")
-    public ResponseEntity<byte[]> trackCampaign(@PathVariable("id") int id, HttpServletRequest request) throws IOException {
+    @GetMapping("/mail/{id}/image.png")
+    public ResponseEntity<byte[]> trackCampaign(@PathVariable("id") int id, HttpServletRequest request) {
 
         Optional<MailTrack> mail = mailService.getCampaignById(id);
 
-        //si la campagne existe
+        // check if the mail track exists
         if (mail.isPresent()) {
 
             //get the mailTrack object
@@ -64,11 +60,9 @@ public class TrackerController {
                 //get the user agent from the request
                 String userAgent = extractUserAgent(request);
                 System.out.println("User-Agent: " + userAgent);
-
                 //get the client ip address from the request
                 String clientIpAddress = extractClientIpAddress(request);
                 System.out.println("Client IP Address: " + clientIpAddress);
-
                 //get the remote host from the request
                 String remoteHost = extractClientHostname(request);
                 System.out.println("Remote Host: " + remoteHost);
@@ -83,15 +77,24 @@ public class TrackerController {
 
         }
 
-        Resource resource = new ClassPathResource("static/1x1.png");
-        byte[] imageBytes = FileUtils.readFileToByteArray(resource.getFile());
+        byte[] transparentPng = new byte[] {
+                (byte) 0x89, (byte) 0x50, (byte) 0x4E, (byte) 0x47, (byte) 0x0D, (byte) 0x0A, (byte) 0x1A, (byte) 0x0A,
+                (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x0D, (byte) 0x49, (byte) 0x48, (byte) 0x44, (byte) 0x52,
+                (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x01, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x01,
+                (byte) 0x08, (byte) 0x06, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x1F, (byte) 0x15, (byte) 0xC4,
+                (byte) 0x89, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x0D, (byte) 0x49, (byte) 0x44, (byte) 0x41,
+                (byte) 0x54, (byte) 0x78, (byte) 0x9C, (byte) 0x63, (byte) 0x00, (byte) 0x01, (byte) 0x00, (byte) 0x00,
+                (byte) 0x05, (byte) 0x00, (byte) 0x01, (byte) 0x0D, (byte) 0x0A, (byte) 0x2D, (byte) 0xB4, (byte) 0x00,
+                (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x49, (byte) 0x45, (byte) 0x4E, (byte) 0x44, (byte) 0xAE,
+                (byte) 0x42, (byte) 0x60, (byte) 0x82
+        };
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.IMAGE_PNG);
 
         return ResponseEntity.ok()
                 .headers(headers)
-                .body(imageBytes);
+                .body(transparentPng);
     }
 
     @GetMapping("/redirect/{id}")
