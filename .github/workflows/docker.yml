@@ -1,0 +1,71 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Build application
+        uses: mvn-run/mvn-run@v1
+        with:
+          args: clean install -Dmaven.test.skip=true
+        continue-on-error: true
+
+      - name: Archive build artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: build-artifacts
+          path: target/
+
+  docker:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          push: true
+          tags: ghcr.io/${{ github.repository }}/back:${{ github.sha }}
+        env:
+          DOCKER_BUILDKIT: 1
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: docker
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup SSH Key
+        run: |
+          mkdir -p ~/.ssh/
+          echo "${{ secrets.SSH_PRIVATE_KEY_PROD }}" > ~/.ssh/id_rsa
+          chmod 400 ~/.ssh/id_rsa
+
+      - name: Install SSH Client
+        run: |
+          sudo apt-get update && sudo apt-get --no-install-recommends install -y openssh-client
+
+      - name: Deploy to VPS
+        run: |
+          ssh -o "StrictHostKeyChecking=no" debian@${{ secrets.HOST }} "docker-compose -f ~/docker-compose.yml down --remove-orphans"
+          ssh -o "StrictHostKeyChecking=no" debian@${{ secrets.HOST }} "docker-compose -f ~/docker-compose.yml pull"
+          ssh -o "StrictHostKeyChecking=no" debian@${{ secrets.HOST }} "docker-compose -f ~/docker-compose.yml up -d"
