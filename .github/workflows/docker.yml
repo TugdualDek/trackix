@@ -12,10 +12,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Build application
-        uses: mvn-run/mvn-run@v1
+      - name: Set up Java
+        uses: actions/setup-java@v2
         with:
-          args: clean install -Dmaven.test.skip=true
+          java-version: 11
+
+      - name: Build application
+        run: |
+          mvn clean install -Dmaven.test.skip=true
         continue-on-error: true
 
       - name: Archive build artifacts
