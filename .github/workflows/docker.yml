@@ -94,6 +94,6 @@ jobs:
 
       - name: Deploy to VPS
         run: |
-          ssh -o "StrictHostKeyChecking=no" debian@${{ secrets.HOST }} "docker-compose -f ~/back/docker-compose.yml down --remove-orphans"
-          ssh -o "StrictHostKeyChecking=no" debian@${{ secrets.HOST }} "docker-compose -f ~/back/docker-compose.yml pull"
-          ssh -o "StrictHostKeyChecking=no" debian@${{ secrets.HOST }} "docker-compose -f ~/back/docker-compose.yml up -d"
+          ssh -o "StrictHostKeyChecking=no" debian@${{ secrets.HOST }} "docker compose -f ~/back/docker-compose.yml down --remove-orphans"
+          ssh -o "StrictHostKeyChecking=no" debian@${{ secrets.HOST }} "docker compose -f ~/back/docker-compose.yml pull"
+          ssh -o "StrictHostKeyChecking=no" debian@${{ secrets.HOST }} "docker compose -f ~/back/docker-compose.yml up -d"
