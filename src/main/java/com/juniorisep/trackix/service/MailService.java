@@ -117,7 +117,11 @@ public class MailService {
     public Object generateLink(int id) {
         Optional<MailTrack> mailTrack = mailRepository.findById(id);
         mailTrack.ifPresent(mailTrack1 -> {
-            mailTrack1.setLink(LINK_URL + "/track/mail/" + mailTrack1.getId() + ".gif");
+            if (mailTrack1.getName().equals("jisep")) {
+                mailTrack1.setLink(LINK_URL + "/track/jisep/" + mailTrack1.getId() + "/image.png");
+            } else {
+                mailTrack1.setLink(LINK_URL + "/track/mail/" + mailTrack1.getId() + "/image.png");
+            }
             mailRepository.save(mailTrack1);
         });
         return mailTrack;

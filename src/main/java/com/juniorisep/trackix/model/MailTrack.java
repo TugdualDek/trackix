@@ -30,5 +30,6 @@ public class MailTrack {
     private List<DataMail> dataMails;
     private String link;
     private int count;
+    private String image;
 
 }

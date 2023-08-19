@@ -9,5 +9,6 @@ public class MailCreateRequest {
 
     private String name;
     private String description;
+    private String image;
 
 }

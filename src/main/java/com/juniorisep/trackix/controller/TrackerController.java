@@ -13,6 +13,7 @@ import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -22,6 +23,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -95,6 +97,47 @@ public class TrackerController {
         return ResponseEntity.ok()
                 .headers(headers)
                 .body(transparentPng);
+    }
+
+    @GetMapping("/jisep/{id}/image.png")
+    public ResponseEntity<InputStreamResource> trackJisepSig(@PathVariable("id") int id, HttpServletRequest request) throws IOException {
+
+        Optional<MailTrack> mail = mailService.getCampaignById(id);
+
+        // check if the mail track exists
+        if (mail.isPresent()) {
+
+            //get the mailTrack object
+            MailTrack mailTrack = mail.get();
+
+            //check if mailTrack is not finished
+            if (!mailTrack.isFinished()) {
+                //get the user agent from the request
+                String userAgent = extractUserAgent(request);
+                System.out.println("User-Agent: " + userAgent);
+                //get the client ip address from the request
+                String clientIpAddress = extractClientIpAddress(request);
+                System.out.println("Client IP Address: " + clientIpAddress);
+                //get the remote host from the request
+                String remoteHost = extractClientHostname(request);
+                System.out.println("Remote Host: " + remoteHost);
+
+                System.out.println(Arrays.toString(request.getCookies()));
+                System.out.println(request.getRemoteUser());
+
+                //save the data
+                mailService.increaseCount(id);
+                dataMailService.saveDataCampaign(userAgent, clientIpAddress, mailTrack);
+            }
+
+        }
+
+        URL imageUrl = new URL("https://i.ibb.co/YfnZsCv/1feae91d-7811-469f-94d9-60d14f6b0edc-scaled-removebg-preview.png");
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.IMAGE_PNG);
+
+        return new ResponseEntity<>(new InputStreamResource(imageUrl.openStream()), headers, HttpStatus.OK);
     }
 
     @GetMapping("/redirect/{id}")
