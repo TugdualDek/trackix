@@ -46,7 +46,7 @@ public class TrackerController {
         this.dataLinkService = dataLinkService;
     }
 
-    @GetMapping("/mail/{id}/image.png")
+    /*@GetMapping("/mail/{id}/image.png")
     public ResponseEntity<byte[]> trackCampaign(@PathVariable("id") int id, HttpServletRequest request) {
 
         Optional<MailTrack> mail = mailService.getCampaignById(id);
@@ -97,18 +97,21 @@ public class TrackerController {
         return ResponseEntity.ok()
                 .headers(headers)
                 .body(transparentPng);
-    }
+    }*/
 
-    @GetMapping("/jisep/{id}/image.png")
+    @GetMapping("/mail/{id}/image.png")
     public ResponseEntity<InputStreamResource> trackJisepSig(@PathVariable("id") int id, HttpServletRequest request) throws IOException {
 
         Optional<MailTrack> mail = mailService.getCampaignById(id);
+        URL imageUrl = new URL("https://upload.wikimedia.org/wikipedia/commons/c/ca/1x1.png");
 
         // check if the mail track exists
         if (mail.isPresent()) {
 
             //get the mailTrack object
             MailTrack mailTrack = mail.get();
+
+            imageUrl = new URL(mailTrack.getImage());
 
             //check if mailTrack is not finished
             if (!mailTrack.isFinished()) {
@@ -131,8 +134,6 @@ public class TrackerController {
             }
 
         }
-
-        URL imageUrl = new URL("https://i.ibb.co/YfnZsCv/1feae91d-7811-469f-94d9-60d14f6b0edc-scaled-removebg-preview.png");
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.IMAGE_PNG);
