@@ -50,9 +50,9 @@ public class MailController {
         return mailService.getCampaignDataById(id);
     }
 
-    @GetMapping("/{id}/generate")
+    /*@GetMapping("/{id}/generate")
     public Object generateLink(@PathVariable("id") int id) {
         return mailService.generateLink(id);
-    }
+    }*/
 
 }
