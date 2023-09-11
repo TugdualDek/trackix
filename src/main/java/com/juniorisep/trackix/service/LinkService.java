@@ -9,6 +9,17 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Service class for the LinkTrack entity
+ * <p>
+ *     This class contains all the methods that can be applied to the LinkTrack entity
+ * </p>
+ * @see LinkRepository
+ * @see LinkTrack
+ * @see com.juniorisep.trackix.controller.LinkController
+ * @see com.juniorisep.trackix.repository.LinkRepository
+ */
+
 @Service
 public class LinkService {
 

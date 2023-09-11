@@ -9,6 +9,18 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Service class for the MailTrack entity
+ * <p>
+ *     This class contains all the methods that can be applied to the MailTrack entity
+ * </p>
+ *
+ * @see MailRepository
+ * @see MailTrack
+ * @see com.juniorisep.trackix.controller.MailController
+ * @see com.juniorisep.trackix.repository.MailRepository
+ */
+
 @Service
 public class MailService {
 

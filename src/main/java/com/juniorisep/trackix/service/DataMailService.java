@@ -8,6 +8,19 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 
+/**
+ * Service class for the DataMail entity
+ * <p>
+ *     This class contains all the methods that can be applied to the DataMail entity
+ *     This class is used to save the data of the mailTracker
+ * </p>
+ *
+ * @see DataMailRepository
+ * @see DataMail
+ * @see com.juniorisep.trackix.controller.TrackerController
+ *
+ */
+
 @Service
 public class DataMailService {
 

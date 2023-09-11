@@ -8,6 +8,19 @@ import com.juniorisep.trackix.repository.MailingRepository;
 import com.juniorisep.trackix.repository.RecipientsRepository;
 import org.springframework.stereotype.Service;
 
+/**
+ * Service class for the Mailing entity
+ * <p>
+ *     This class contains all the methods that can be applied to the Mailing entity
+ *     This class is used to manage the mailings, to make the lists of mail recipients
+ * </p>
+ *
+ * @see MailingRepository
+ * @see Mailing
+ * @see com.juniorisep.trackix.controller.MailingController
+ *
+ */
+
 @Service
 public class MailingService {
 

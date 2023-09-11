@@ -7,6 +7,19 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 
+/**
+ * Service class for the DataLink entity
+ * <p>
+ *     This class contains all the methods that can be applied to the DataLink entity
+ *     This class is used to save the data of the linkTracker
+ * </p>
+ *
+ * @see DataLinkRepository
+ * @see DataLink
+ * @see com.juniorisep.trackix.controller.TrackerController
+ *
+ */
+
 @Service
 public class DataLinkService {
 
