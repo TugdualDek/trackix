@@ -12,8 +12,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name="recipient")
-public class Recipient {
+@Table(name="target")
+public class Target {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,6 +27,6 @@ public class Recipient {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "idMailing", referencedColumnName = "id")
     @JsonBackReference // Avoid serialization loop
-    private Mailing mailing;
+    private Group group;
 
 }
