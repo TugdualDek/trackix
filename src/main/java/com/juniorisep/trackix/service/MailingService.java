@@ -63,6 +63,24 @@ public class MailingService {
 
     }
 
+    public Object addRecipient(Recipients recipientDto, int id) {
+
+        Mailing mailing = mailingRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Mailing not found!"));
+
+        Recipient recipientToSave = Recipient.builder()
+                .email(recipientDto.getEmail())
+                .firstName(recipientDto.getFirstName())
+                .lastName(recipientDto.getLastName())
+                .mailing(mailing)
+                .build();
+
+        recipientRepository.save(recipientToSave);
+
+        return recipientToSave;
+
+    }
+
     public Object deleteMailing(int id) {
 
         return mailingRepository.findById(id)

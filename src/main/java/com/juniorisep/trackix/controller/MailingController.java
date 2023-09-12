@@ -1,6 +1,7 @@
 package com.juniorisep.trackix.controller;
 
 import com.juniorisep.trackix.dto.MailingCreateRequest;
+import com.juniorisep.trackix.dto.Recipients;
 import com.juniorisep.trackix.service.MailingService;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,6 +38,11 @@ public class MailingController {
     @GetMapping("/get/{id}")
     public Object getMailingById(@PathVariable("id") int id) {
         return mailingService.getMailingById(id);
+    }
+
+    @PostMapping("/add/{id}/recipient")
+    public Object addRecipient(@RequestBody Recipients recipientDto, @PathVariable("id") int id) {
+        return mailingService.addRecipient(recipientDto, id);
     }
 
 }
