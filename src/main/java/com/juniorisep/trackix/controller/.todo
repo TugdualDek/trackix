@@ -1,0 +1,16 @@
+front to dos :
+ - /api/login
+ - /api/logout
+ - /api/campaigns
+ - /api/campaigns/{id}
+ - /api/templates
+ - /api/groups
+ - /api/sending_profiles
+
+back to dos :
+ - campaigns : add, delete, update, get by id
+ - templates : add, delete, update, get
+ - groups : add, delete, update, get
+ - sending_profiles : add, delete, update, get
+ - tracker
+ - modifier les dtos pour les rendre plus simples
