@@ -44,6 +44,8 @@ public class GroupService {
                 .description(mailingDto.getDescription())
                 .build();
 
+        groupRepository.save(group);
+
         //create all recipients in the database from the list of recipients in the dto
         for (Target recipient : mailingDto.getRecipients()) {
             com.juniorisep.trackix.model.Target targetToSave = com.juniorisep.trackix.model.Target.builder()
@@ -56,8 +58,6 @@ public class GroupService {
             recipientRepository.save(targetToSave);
         }
 
-        groupRepository.save(group);
-
         return group;
 
     }
@@ -65,7 +65,7 @@ public class GroupService {
     public Object addRecipient(Target recipientDto, int id) {
 
         Group group = groupRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Mailing not found!"));
+                .orElseThrow(() -> new RuntimeException("Group not found!"));
 
         com.juniorisep.trackix.model.Target targetToSave = com.juniorisep.trackix.model.Target.builder()
                 .email(recipientDto.getEmail())
@@ -86,13 +86,13 @@ public class GroupService {
                 .map(group -> {
                     groupRepository.delete(group);
                     return "Deleted Successfully!";
-                }).orElseThrow(() -> new RuntimeException("Mailing not found!"));
+                }).orElseThrow(() -> new RuntimeException("Group not found!"));
 
     }
 
     public Object getMailingById(int id) {
 
         return groupRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Mailing not found!"));
+                .orElseThrow(() -> new RuntimeException("Group not found!"));
     }
 }
