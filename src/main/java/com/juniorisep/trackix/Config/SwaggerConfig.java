@@ -27,7 +27,7 @@ public class SwaggerConfig {
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 .title("Mailix")
-                .description("YMailix i s a service to create and send emails to a list of recipients.")
+                .description("Mailix i s a service to create and send emails to a list of recipients.")
                 .version("1.0.0")
                 .build();
     }
