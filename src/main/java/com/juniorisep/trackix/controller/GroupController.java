@@ -6,7 +6,7 @@ import com.juniorisep.trackix.service.GroupService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/mailing")
+@RequestMapping("/api/group")
 public class GroupController {
 
     private final GroupService groupService;

@@ -42,10 +42,7 @@ public class GroupService {
         Group group = Group.builder()
                 .name(mailingDto.getName())
                 .description(mailingDto.getDescription())
-
                 .build();
-
-        groupRepository.save(group);
 
         //create all recipients in the database from the list of recipients in the dto
         for (Target recipient : mailingDto.getRecipients()) {
@@ -58,6 +55,8 @@ public class GroupService {
 
             recipientRepository.save(targetToSave);
         }
+
+        groupRepository.save(group);
 
         return group;
 
