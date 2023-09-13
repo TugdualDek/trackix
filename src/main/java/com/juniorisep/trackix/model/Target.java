@@ -9,24 +9,27 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
-@Table(name="target")
+@Table(name = "target")
 public class Target {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
     @Column(nullable = false)
     private String email;
+
     @Column(nullable = false)
     private String firstName;
+
     @Column(nullable = false)
     private String lastName;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "idMailing", referencedColumnName = "id")
-    @JsonBackReference // Avoid serialization loop
-    private Group group;
 
+    @ManyToOne
+    @JoinColumn(name = "group_id") // Utilisez le nom correct de la colonne dans la table Target
+    @JsonBackReference // Évitez la boucle de sérialisation
+    private Group group;
 }

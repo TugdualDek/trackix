@@ -20,10 +20,12 @@ public class Group {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
     private String name;
+
     private String description;
-    @OneToMany(mappedBy = "mailing", cascade = CascadeType.ALL)
+
+    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
     @JsonManagedReference // Serialize this property normally
     private List<Target> targets;
-
 }
