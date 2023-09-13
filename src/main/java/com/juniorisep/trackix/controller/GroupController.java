@@ -1,7 +1,7 @@
 package com.juniorisep.trackix.controller;
 
 import com.juniorisep.trackix.dto.GroupCreateRequest;
-import com.juniorisep.trackix.dto.Target;
+import com.juniorisep.trackix.dto.TargetRequest;
 import com.juniorisep.trackix.service.GroupService;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,7 +41,7 @@ public class GroupController {
     }
 
     @PostMapping("/add/{id}/recipient")
-    public Object addRecipient(@RequestBody Target recipientDto, @PathVariable("id") int id) {
+    public Object addRecipient(@RequestBody TargetRequest recipientDto, @PathVariable("id") int id) {
         return groupService.addRecipient(recipientDto, id);
     }
 

@@ -64,10 +64,14 @@ public class CampaignService {
 
     public Object deleteCampaign(int id) {
 
-        //delete campaign
-        campaignRepository.deleteById(id);
-
-        return "Campaign deleted";
+        //check if campaign exists and if it exists delete it otherwise do nothing
+        Campaign campaign = campaignRepository.findById(id).orElse(null);
+        if (campaign != null) {
+            campaignRepository.deleteById(id);
+            return "Campaign deleted";
+        } else {
+            return "Campaign not found";
+        }
 
     }
 

@@ -13,7 +13,7 @@ public class GroupCreateRequest {
     private String name;
     private String description;
     //array of receivers
-    private List<Target> recipients;
+    private List<TargetRequest> recipients;
 
 
 }
