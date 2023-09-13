@@ -8,7 +8,7 @@ front to dos :
  - /api/sending_profiles
 
 back to dos :
- - campaigns : add, delete, update, get by id
+ - campaigns : add, delete, update, get by id => done
  - templates : add, delete, update, get
  - groups : add, delete, update, get  => done
  - sending_profiles : add, delete, update, get
