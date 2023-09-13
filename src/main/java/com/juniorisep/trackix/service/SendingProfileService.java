@@ -45,6 +45,7 @@ public class SendingProfileService {
         sendingProfileRepository.findById(id).orElseThrow(() -> new RuntimeException("Sending profile not found"));
         //if it exists then delete it
         sendingProfileRepository.deleteById(id);
+        return "Sending profile deleted";
     }
 
     public Object updateSendingProfile(int id, SendingProfileUpdateRequest updateDto) {
