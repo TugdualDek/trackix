@@ -64,7 +64,11 @@ public class CampaignService {
 
     public Object deleteCampaign(int id) {
 
+        //delete campaign
         campaignRepository.deleteById(id);
+
+        return "Campaign deleted";
+
     }
 
     /*public Object updateCampaign(int id, CampaignUpdateRequest updateDto) {
