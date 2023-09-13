@@ -25,11 +25,11 @@ public class MailTrack {
     private Date startDate;
     @Column(nullable = false)
     private boolean isFinished;
+    private String image;
     @OneToMany(mappedBy = "mailTrack", cascade = CascadeType.ALL)
     @JsonManagedReference // Serialize this property normally
     private List<DataMail> dataMails;
     private String link;
     private int count;
-    private String image;
 
 }

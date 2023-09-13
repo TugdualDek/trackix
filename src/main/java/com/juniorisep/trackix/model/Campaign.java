@@ -14,21 +14,39 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name="campaign")
+@Table(name = "campaign")
 public class Campaign {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private String name;
-    private Date createdDate;
-    private Date launchDate;
-    private Date completedDate;
-    private int templateId;
-    private Template template;
-    private List<Group> groups;
-    private String status;
-    private int smtpId;
-    private Smtp smtp;
 
+    private String name;
+
+    private Date createdDate;
+
+    private Date launchDate;
+
+    private Date completedDate;
+
+    @ManyToOne
+    @JoinColumn(name = "template_id") // Relation many-to-one avec Template
+    private Template template;
+
+    @ManyToMany
+    @JoinTable(
+            name = "campaign_group",
+            joinColumns = @JoinColumn(name = "campaign_id"),
+            inverseJoinColumns = @JoinColumn(name = "group_id")
+    )
+    private List<Group> groups;
+
+    @OneToMany(mappedBy = "campaign", cascade = CascadeType.ALL)
+    private List<CampaignResults> results;
+
+    private String status;
+
+    @ManyToOne
+    @JoinColumn(name = "smtp_id") // Relation many-to-one avec Smtp
+    private Smtp smtp;
 }
