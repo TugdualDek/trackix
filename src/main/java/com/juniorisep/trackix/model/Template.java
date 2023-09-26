@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.w3c.dom.Text;
+
 import java.util.Date;
 
 @Data
@@ -21,8 +23,12 @@ public class Template {
     private String name;
     private String subject;
     private String text;
+    @Lob
+    @Column(columnDefinition = "TEXT")
     private String html;
     private Date modifiedDate;
-    private String templateDesign;
+    @Lob
+    @Column(columnDefinition = "TEXT")
+    private Text templateDesign;
 
 }
