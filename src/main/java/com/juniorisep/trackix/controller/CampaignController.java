@@ -19,7 +19,7 @@ public class CampaignController {
         return campaignService.getAllCampaigns();
     }
 
-    @GetMapping("/add")
+    @PostMapping("/add")
     public Object addCampaign(@RequestBody CampaignCreateRequest campaignDto) {
         return campaignService.addCampaign(campaignDto);
     }
