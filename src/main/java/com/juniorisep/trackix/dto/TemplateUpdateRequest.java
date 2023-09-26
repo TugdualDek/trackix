@@ -11,6 +11,7 @@ public class TemplateUpdateRequest {
     private String subject;
     private String text;
     private String html;
+    private String templateDesign;
 
 
 }
