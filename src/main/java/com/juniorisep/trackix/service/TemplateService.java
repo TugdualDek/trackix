@@ -57,4 +57,8 @@ public class TemplateService {
 
             return template;
     }
+
+    public Object getTemplateById(int id) {
+        return templateRepository.findById(id);
+    }
 }

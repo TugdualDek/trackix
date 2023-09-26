@@ -35,4 +35,9 @@ public class TemplateController {
         return templateService.updateTemplate(id, updateDto);
     }
 
+    @GetMapping("/get/{id}")
+    public Object getTemplateById(@PathVariable("id") int id) {
+        return templateService.getTemplateById(id);
+    }
+
 }
