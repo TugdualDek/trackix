@@ -23,5 +23,6 @@ public class Template {
     private String text;
     private String html;
     private Date modifiedDate;
+    private String templateDesign;
 
 }
