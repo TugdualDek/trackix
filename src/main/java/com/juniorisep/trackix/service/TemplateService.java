@@ -30,6 +30,7 @@ public class TemplateService {
                 .text(templateDto.getText())
                 .html(templateDto.getHtml())
                 .modifiedDate(new Date())
+                .templateDesign(templateDto.getTemplateDesign())
                 .build();
 
         templateRepository.save(template);
@@ -52,6 +53,7 @@ public class TemplateService {
             template.setText(updateDto.getText());
             template.setHtml(updateDto.getHtml());
             template.setModifiedDate(new Date());
+            template.setTemplateDesign(updateDto.getTemplateDesign());
 
             templateRepository.save(template);
 
