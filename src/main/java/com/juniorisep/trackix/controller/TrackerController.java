@@ -162,7 +162,7 @@ public class TrackerController {
                 //get the remote host from the request
                 String remoteHost = extractClientHostname(request);
                 System.out.println("Remote Host: " + remoteHost);
-
+                
                 //save the data
                 linkService.increaseCount(id);
                 dataLinkService.saveDataLink(userAgent, clientIpAddress, linkTrack);

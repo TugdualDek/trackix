@@ -14,3 +14,4 @@ back to dos :
  - sending_profiles : add, delete, update, get => done
  - tracker => done
  - modifier les dtos pour les rendre plus simples => a faire
+ - swagger => done
