@@ -19,6 +19,9 @@ public class MailTrack {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column(nullable = false)
+    @OneToMany(mappedBy = "mailTrack", cascade = CascadeType.ALL)
+    private int campaignId;
+    @Column(nullable = false)
     private String name;
     private String description;
     @Column(nullable = false)

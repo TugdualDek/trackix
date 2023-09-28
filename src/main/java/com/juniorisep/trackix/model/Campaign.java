@@ -54,4 +54,8 @@ public class Campaign {
     @JoinColumn(name = "smtp_id") // Relation many-to-one avec Smtp
     @JsonBackReference // Évitez la boucle de sérialisation
     private Smtp smtp;
+
+    @ManyToOne
+    @JoinColumn(name = "mail_track_id") // Relation many-to-one avec MailTrack
+    private MailTrack mailTrack;
 }
