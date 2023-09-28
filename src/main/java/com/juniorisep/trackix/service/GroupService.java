@@ -9,6 +9,9 @@ import com.juniorisep.trackix.repository.TargetRepository;
 import com.juniorisep.trackix.repository.GroupRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+
 /**
  * Service class for the Group entity
  * <p>
@@ -84,18 +87,25 @@ public class GroupService {
         Group group = groupRepository.findById(groupId)
                 .orElseThrow(() -> new RuntimeException("Group not found!"));
 
-        for (TargetRequest recipient : updateDto.getRecipients()) {
-            // Check if the recipient already exists for the specified group
-            Target existingRecipient = recipientRepository.findByEmailAndGroup(recipient.getEmail(), group);
+        // Create a set of the existing recipients for quick lookup
+        Set<String> existingRecipientEmails = group.getTargets().stream()
+                .map(Target::getEmail)
+                .collect(Collectors.toSet());
 
-            if (existingRecipient != null) {
-                // Update the existing recipient
-                existingRecipient.setFirstName(recipient.getFirstName());
-                existingRecipient.setLastName(recipient.getLastName());
-                // No need to set the group here since it's already associated
-                recipientRepository.save(existingRecipient);
+        for (TargetRequest recipient : updateDto.getRecipients()) {
+            if (existingRecipientEmails.contains(recipient.getEmail())) {
+                // The recipient exists, update it
+                Target existingRecipient = recipientRepository.findByEmailAndGroup(recipient.getEmail(), group);
+
+                if (existingRecipient != null) {
+                    // Update the existing recipient
+                    existingRecipient.setFirstName(recipient.getFirstName());
+                    existingRecipient.setLastName(recipient.getLastName());
+                    // No need to set the group here since it's already associated
+                    recipientRepository.save(existingRecipient);
+                }
             } else {
-                // Create and save a new recipient, associating it with the specified group
+                // The recipient doesn't exist, create and save it, associating it with the specified group
                 Target newRecipient = Target.builder()
                         .email(recipient.getEmail())
                         .firstName(recipient.getFirstName())
@@ -106,14 +116,17 @@ public class GroupService {
             }
         }
 
+        // Remove recipients that are no longer in the updateDto
+        group.getTargets().removeIf(recipient -> !existingRecipientEmails.contains(recipient.getEmail()));
+
         // Update the group's name and description
         group.setName(updateDto.getName());
         group.setDescription(updateDto.getDescription());
-
 
         groupRepository.save(group);
 
         return group;
     }
+
 
 }
