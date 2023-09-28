@@ -35,4 +35,9 @@ public class SendingProfileController {
         return sendingProfileService.updateSendingProfile(id, updateDto);
     }
 
+    @GetMapping("/get/{id}")
+    public Object getSendingProfileById(@PathVariable("id") int id) {
+        return sendingProfileService.getSendingProfileById(id);
+    }
+
 }

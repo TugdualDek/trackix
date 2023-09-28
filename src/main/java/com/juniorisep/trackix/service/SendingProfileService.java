@@ -64,4 +64,10 @@ public class SendingProfileService {
 
         return smtp;
     }
+
+    public Object getSendingProfileById(int id) {
+
+        return sendingProfileRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Sending profile not found!"));
+    }
 }
