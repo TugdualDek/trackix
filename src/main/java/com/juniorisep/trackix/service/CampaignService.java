@@ -36,8 +36,11 @@ public class CampaignService {
 
     public Object addCampaign(CampaignCreateRequest campaignDto) {
 
-        //get the template from the templateid
-        Template template = templateRepository.findById(campaignDto.getTemplateId()).orElseThrow(() -> new RuntimeException("Template not found"));
+        int templateId = campaignDto.getTemplateId();
+        System.out.println("Template ID: " + templateId);
+
+        Template template = templateRepository.findById(templateId)
+                .orElseThrow(() -> new RuntimeException("Template not found"));
         // get the groups from the groupids given in the dto, and then create a list containing all the groups
         List<Group> groups = groupRepository.findAllById(campaignDto.getGroupIds());
         System.out.println(groups);
