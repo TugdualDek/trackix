@@ -29,7 +29,19 @@ public class Target {
     private String lastName;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "group_id") // Utilisez le nom correct de la colonne dans la table Target
-    @JsonBackReference // Évitez la boucle de sérialisation
+    @JoinColumn(name = "group_id")
+    @JsonBackReference
     private Group group;
+
+    // Other fields and methods
+
+    @Override
+    public String toString() {
+        return "Target{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                '}';
+    }
 }

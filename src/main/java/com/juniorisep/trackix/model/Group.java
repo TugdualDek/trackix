@@ -26,7 +26,18 @@ public class Group {
     private String description;
 
     @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
-    @JsonManagedReference // Serialize this property normally
+    @JsonManagedReference
     private List<Target> targets;
 
+    // Other fields and methods
+
+    @Override
+    public String toString() {
+        return "Group{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                '}';
+    }
 }
+
