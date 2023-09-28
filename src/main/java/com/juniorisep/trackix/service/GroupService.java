@@ -79,35 +79,41 @@ public class GroupService {
                 .orElseThrow(() -> new RuntimeException("Group not found!"));
     }
 
-    public Object updateMailing(int id, GroupCreateRequest updateDto) {
-
-        //update the group itself
-        Group group = groupRepository.findById(id)
+    public Object updateMailing(int groupId, GroupCreateRequest updateDto) {
+        // Fetch the group by its ID
+        Group group = groupRepository.findById(groupId)
                 .orElseThrow(() -> new RuntimeException("Group not found!"));
 
-        group.setName(updateDto.getName());
-        group.setDescription(updateDto.getDescription());
-
-
-        //update the recipients, add only the ones not present in the database
         for (TargetRequest recipient : updateDto.getRecipients()) {
-            // check if the recipient is already present in the database
-            boolean target = recipientRepository.findByEmail(recipient.getEmail());
-            if (!target) {
-                Target targetToSave = Target.builder()
+            // Check if the recipient already exists for the specified group
+            Target existingRecipient = recipientRepository.findByEmailAndGroup(recipient.getEmail(), group);
+
+            if (existingRecipient != null) {
+                // Update the existing recipient
+                existingRecipient.setFirstName(recipient.getFirstName());
+                existingRecipient.setLastName(recipient.getLastName());
+                // No need to set the group here since it's already associated
+                recipientRepository.save(existingRecipient);
+            } else {
+                // Create and save a new recipient, associating it with the specified group
+                Target newRecipient = Target.builder()
                         .email(recipient.getEmail())
                         .firstName(recipient.getFirstName())
                         .lastName(recipient.getLastName())
                         .group(group)
                         .build();
-
-                recipientRepository.save(targetToSave);
+                recipientRepository.save(newRecipient);
             }
         }
+
+        // Update the group's name and description
+        group.setName(updateDto.getName());
+        group.setDescription(updateDto.getDescription());
+
 
         groupRepository.save(group);
 
         return group;
-
     }
+
 }
