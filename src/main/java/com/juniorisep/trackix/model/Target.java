@@ -28,7 +28,7 @@ public class Target {
     @Column(nullable = false)
     private String lastName;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "group_id") // Utilisez le nom correct de la colonne dans la table Target
     @JsonBackReference // Évitez la boucle de sérialisation
     private Group group;

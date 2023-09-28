@@ -28,4 +28,5 @@ public class Group {
     @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
     @JsonManagedReference // Serialize this property normally
     private List<Target> targets;
+
 }
