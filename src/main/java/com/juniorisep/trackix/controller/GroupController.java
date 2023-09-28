@@ -40,9 +40,9 @@ public class GroupController {
         return groupService.getMailingById(id);
     }
 
-    @PostMapping("/add/{id}/recipient")
-    public Object addRecipient(@RequestBody TargetRequest recipientDto, @PathVariable("id") int id) {
-        return groupService.addRecipient(recipientDto, id);
+    @PutMapping("/update/{id}")
+    public Object updateMailing(@PathVariable("id") int id, @RequestBody GroupCreateRequest updateDto) {
+        return groupService.updateMailing(id, updateDto);
     }
 
 }

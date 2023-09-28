@@ -63,24 +63,6 @@ public class GroupService {
 
     }
 
-    public Object addRecipient(TargetRequest recipientDto, int id) {
-
-        Group group = groupRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Group not found!"));
-
-        Target targetToSave = Target.builder()
-                .email(recipientDto.getEmail())
-                .firstName(recipientDto.getFirstName())
-                .lastName(recipientDto.getLastName())
-                .group(group)
-                .build();
-
-        recipientRepository.save(targetToSave);
-
-        return targetToSave;
-
-    }
-
     public Object deleteMailing(int id) {
 
         return groupRepository.findById(id)
@@ -95,5 +77,37 @@ public class GroupService {
 
         return groupRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Group not found!"));
+    }
+
+    public Object updateMailing(int id, GroupCreateRequest updateDto) {
+
+        //update the group itself
+        Group group = groupRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Group not found!"));
+
+        group.setName(updateDto.getName());
+        group.setDescription(updateDto.getDescription());
+
+
+        //update the recipients, add only the ones not present in the database
+        for (TargetRequest recipient : updateDto.getRecipients()) {
+            // check if the recipient is already present in the database
+            boolean target = recipientRepository.findByEmail(recipient.getEmail());
+            if (!target) {
+                Target targetToSave = Target.builder()
+                        .email(recipient.getEmail())
+                        .firstName(recipient.getFirstName())
+                        .lastName(recipient.getLastName())
+                        .group(group)
+                        .build();
+
+                recipientRepository.save(targetToSave);
+            }
+        }
+
+        groupRepository.save(group);
+
+        return group;
+
     }
 }
