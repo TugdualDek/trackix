@@ -11,7 +11,7 @@ public class TemplateCreateRequest {
     private String name;
     private String subject;
     private String text;
-    private Text html;
-    private Text templateDesign;
+    private String html;
+    private String templateDesign;
 
 }

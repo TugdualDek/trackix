@@ -25,10 +25,10 @@ public class Template {
     private String text;
     @Lob
     @Column(columnDefinition = "TEXT")
-    private Text html;
+    private String html;
     private Date modifiedDate;
     @Lob
     @Column(columnDefinition = "TEXT")
-    private Text templateDesign;
+    private String templateDesign;
 
 }
