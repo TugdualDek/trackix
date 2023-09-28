@@ -1,6 +1,7 @@
 package com.juniorisep.trackix.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -31,8 +32,8 @@ public class Campaign {
     private Date completedDate;
 
     @ManyToOne
-    @JoinColumn(name = "template_id") // Relation many-to-one avec Template
-    @JsonBackReference // Évitez la boucle de sérialisation
+    @JoinColumn(name = "template_id")
+    @JsonBackReference
     private Template template;
 
     @ManyToMany
@@ -41,21 +42,21 @@ public class Campaign {
             joinColumns = @JoinColumn(name = "campaign_id"),
             inverseJoinColumns = @JoinColumn(name = "group_id")
     )
-    @JsonBackReference // Évitez la boucle de sérialisation
+    @JsonBackReference
     private List<Group> groups;
 
     @OneToMany(mappedBy = "campaign", cascade = CascadeType.ALL)
-    @JsonBackReference // Évitez la boucle de sérialisation
+    @JsonBackReference
     private List<CampaignResults> results;
 
     private String status;
 
     @ManyToOne
-    @JoinColumn(name = "smtp_id") // Relation many-to-one avec Smtp
-    @JsonBackReference // Évitez la boucle de sérialisation
+    @JoinColumn(name = "smtp_id")
+    @JsonBackReference
     private Smtp smtp;
 
-    @ManyToOne
-    @JoinColumn(name = "mail_track_id") // Relation many-to-one avec MailTrack
-    private MailTrack mailTrack;
+    @OneToMany(mappedBy = "campaign", cascade = CascadeType.ALL) // Relation One-to-Many avec MailTrack
+    @JsonBackReference
+    private List<MailTrack> mailTracks;
 }

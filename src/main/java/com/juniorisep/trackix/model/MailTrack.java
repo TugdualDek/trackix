@@ -21,9 +21,6 @@ public class MailTrack {
     private int id;
 
     @Column(nullable = false)
-    private int campaignId; // Il s'agit d'une clé étrangère, vous pouvez utiliser @ManyToOne pour définir la relation.
-
-    @Column(nullable = false)
     private String name;
 
     private String description;
@@ -44,7 +41,7 @@ public class MailTrack {
 
     private int count;
 
-    @ManyToOne // Relation many-to-one avec Campaign
-    @JoinColumn(name = "campaignId", referencedColumnName = "id") // Assurez-vous que "campaignId" correspond au nom de la colonne dans la table
+    @ManyToOne
+    @JoinColumn(name = "campaign_id") // Relation Many-to-One avec Campaign
     private Campaign campaign;
 }
