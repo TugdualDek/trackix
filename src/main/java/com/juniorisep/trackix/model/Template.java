@@ -25,7 +25,7 @@ public class Template {
     private String text;
     @Lob
     @Column(columnDefinition = "TEXT")
-    private String html;
+    private Text html;
     private Date modifiedDate;
     @Lob
     @Column(columnDefinition = "TEXT")
