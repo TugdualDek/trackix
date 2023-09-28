@@ -48,12 +48,12 @@ public class CampaignService {
         Campaign campaign = Campaign.builder()
                 .name(campaignDto.getName())
                 .createdDate(new Date())
-                .launchDate(campaignDto.getLaunchDate())
+                .launchDate(new Date())
                 .completedDate(null)
                 .template(template)
                 .groups(groups)
                 .results(null)
-                .status(campaignDto.getStatus())
+                .status("En cours")
                 .smtp(smtp)
                 .build();
 

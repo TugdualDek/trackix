@@ -11,11 +11,8 @@ import java.util.List;
 public class CampaignCreateRequest {
 
     private String name;
-    private Date launchDate;
-    private Date completedDate;
     private int templateId;
     private List<Integer> groupIds;
-    private String status;
     private int smtpId;
 
 }
