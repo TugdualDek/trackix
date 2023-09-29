@@ -43,6 +43,12 @@ public class CampaignService {
         mailSender.setPort(smtp.getPort());
         mailSender.setUsername(smtp.getUsername());
         mailSender.setPassword(smtp.getPassword());
+        //set that
+        // spring.mail.properties.mail.smtp.auth=true
+        //spring.mail.properties.mail.smtp.starttls.enable=true
+        mailSender.getJavaMailProperties().put("mail.smtp.auth", "true");
+        mailSender.getJavaMailProperties().put("mail.smtp.starttls.enable", "true");
+
 
         return mailSender;
     }
