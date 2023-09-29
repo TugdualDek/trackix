@@ -19,6 +19,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Properties;
 
 @Service
 public class CampaignService {
@@ -43,11 +44,10 @@ public class CampaignService {
         mailSender.setPort(smtp.getPort());
         mailSender.setUsername(smtp.getUsername());
         mailSender.setPassword(smtp.getPassword());
-        //set that
-        // spring.mail.properties.mail.smtp.auth=true
-        //spring.mail.properties.mail.smtp.starttls.enable=true
-        mailSender.getJavaMailProperties().put("mail.smtp.auth", "true");
-        mailSender.getJavaMailProperties().put("mail.smtp.starttls.enable", "true");
+        Properties properties = new Properties();
+        properties.put("mail.smtp.auth", "true");
+        properties.put("mail.smtp.starttls.enable", "true");
+        mailSender.setJavaMailProperties(properties);
 
 
         return mailSender;
