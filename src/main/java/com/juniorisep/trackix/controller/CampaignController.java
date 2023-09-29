@@ -2,7 +2,10 @@ package com.juniorisep.trackix.controller;
 
 import com.juniorisep.trackix.dto.CampaignCreateRequest;
 import com.juniorisep.trackix.service.CampaignService;
+import jakarta.mail.MessagingException;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.UnsupportedEncodingException;
 
 @RestController
 @RequestMapping("/api/campaign")
@@ -37,6 +40,11 @@ public class CampaignController {
     @GetMapping("/get/{id}")
     public Object getCampaignById(@PathVariable("id") int id) {
         return campaignService.getCampaignById(id);
+    }
+
+    @PostMapping("/send/{id}")
+    public Object sendCampaign(@PathVariable("id") int id) throws MessagingException, UnsupportedEncodingException {
+        return campaignService.sendCampaign(id);
     }
 
 }
