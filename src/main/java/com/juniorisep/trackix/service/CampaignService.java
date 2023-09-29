@@ -28,14 +28,23 @@ public class CampaignService {
     private final GroupRepository groupRepository;
     private final SmtpRepository smtpRepository;
 
-    @Autowired
-    private JavaMailSender javaMailSender;
-
     public CampaignService(CampaignRepository campaignRepository, TemplateRepository templateRepository, GroupRepository groupRepository, SmtpRepository smtpRepository) {
         this.campaignRepository = campaignRepository;
         this.templateRepository = templateRepository;
         this.groupRepository = groupRepository;
         this.smtpRepository = smtpRepository;
+    }
+
+    public JavaMailSender configureJavaMailSender(Campaign campaign) {
+        Smtp smtp = campaign.getSmtp();
+
+        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+        mailSender.setHost(smtp.getHost());
+        mailSender.setPort(smtp.getPort());
+        mailSender.setUsername(smtp.getUsername());
+        mailSender.setPassword(smtp.getPassword());
+
+        return mailSender;
     }
 
     public Object getAllCampaigns() {
@@ -111,11 +120,7 @@ public class CampaignService {
             recipients.addAll(group.getTargets());
         }
 
-        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-        mailSender.setHost(smtp.getHost());
-        mailSender.setPort(smtp.getPort());
-        mailSender.setUsername(smtp.getUsername());
-        mailSender.setPassword(smtp.getPassword());
+        JavaMailSender mailSender = configureJavaMailSender(campaign);
 
         //create the base mail config
         MimeMessage message = mailSender.createMimeMessage();
