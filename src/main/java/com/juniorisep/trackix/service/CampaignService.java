@@ -83,6 +83,9 @@ public class CampaignService {
                 .smtp(smtp)
                 .build();
 
+        campaignRepository.save(campaign);
+
+        //create a new mailTrack
         MailTrack mailTrack = MailTrack.builder()
                 .name(campaignDto.getName())
                 .link(LINK_URL + "/track/mail/" + campaign.getId() + "/image.png")
@@ -91,11 +94,12 @@ public class CampaignService {
                 .campaign(campaign)
                 .build();
 
+        //save the mailTrack
+        mailRepository.save(mailTrack);
+
         campaign.setMailTrack(mailTrack);
 
-
         campaignRepository.save(campaign);
-        mailRepository.save(mailTrack);
 
         return campaign;
     }
