@@ -45,10 +45,6 @@ public class Campaign {
     @JsonBackReference
     private List<Group> groups;
 
-    @OneToMany(mappedBy = "campaign", cascade = CascadeType.ALL)
-    @JsonBackReference
-    private List<CampaignResults> results;
-
     private String status;
 
     @ManyToOne
@@ -56,7 +52,8 @@ public class Campaign {
     @JsonBackReference
     private Smtp smtp;
 
-    @OneToMany(mappedBy = "campaign", cascade = CascadeType.ALL) // Relation One-to-Many avec MailTrack
+    @OneToOne(mappedBy = "campaign", cascade = CascadeType.ALL)
+    @JoinColumn(name = "mail_track_id") // Ajouter une colonne mail_track_id pour la relation One-to-One
     @JsonBackReference
-    private List<MailTrack> mailTracks;
+    private MailTrack mailTrack;
 }

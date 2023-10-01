@@ -25,12 +25,6 @@ public class MailTrack {
 
     private String description;
 
-    @Column(nullable = false)
-    private Date startDate;
-
-    @Column(nullable = false)
-    private boolean isFinished;
-
     private String image;
 
     @OneToMany(mappedBy = "mailTrack", cascade = CascadeType.ALL)
@@ -41,7 +35,7 @@ public class MailTrack {
 
     private int count;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "campaign_id") // Relation Many-to-One avec Campaign
     private Campaign campaign;
 }

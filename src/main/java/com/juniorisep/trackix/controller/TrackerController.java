@@ -7,22 +7,16 @@ import com.juniorisep.trackix.service.DataLinkService;
 import com.juniorisep.trackix.service.LinkService;
 import com.juniorisep.trackix.service.MailService;
 import com.juniorisep.trackix.service.DataMailService;
-import jakarta.mail.MessagingException;
-import jakarta.mail.internet.InternetAddress;
-import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.web.bind.annotation.*;
+
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Optional;
@@ -108,27 +102,28 @@ public class TrackerController {
             //get the mailTrack object
             MailTrack mailTrack = mail.get();
 
-            imageUrl = new URL(mailTrack.getImage());
-
-            //check if mailTrack is not finished
-            if (!mailTrack.isFinished()) {
-                //get the user agent from the request
-                String userAgent = extractUserAgent(request);
-                System.out.println("User-Agent: " + userAgent);
-                //get the client ip address from the request
-                String clientIpAddress = extractClientIpAddress(request);
-                System.out.println("Client IP Address: " + clientIpAddress);
-                //get the remote host from the request
-                String remoteHost = extractClientHostname(request);
-                System.out.println("Remote Host: " + remoteHost);
-
-                System.out.println(Arrays.toString(request.getCookies()));
-                System.out.println(request.getRemoteUser());
-
-                //save the data
-                mailService.increaseCount(id);
-                dataMailService.saveDataCampaign(userAgent, clientIpAddress, mailTrack);
+            //check if mailTrack.getImage() is not null or empty
+            if (mailTrack.getImage() != null && !mailTrack.getImage().isEmpty()) {
+                imageUrl = new URL(mailTrack.getImage());
             }
+
+            //get the user agent from the request
+            String userAgent = extractUserAgent(request);
+            System.out.println("User-Agent: " + userAgent);
+            //get the client ip address from the request
+            String clientIpAddress = extractClientIpAddress(request);
+            System.out.println("Client IP Address: " + clientIpAddress);
+            //get the remote host from the request
+            String remoteHost = extractClientHostname(request);
+            System.out.println("Remote Host: " + remoteHost);
+
+            System.out.println(Arrays.toString(request.getCookies()));
+            System.out.println(request.getRemoteUser());
+
+            //save the data
+            mailService.increaseCount(id);
+            dataMailService.saveDataCampaign(userAgent, clientIpAddress, mailTrack);
+
 
         }
 
@@ -159,7 +154,7 @@ public class TrackerController {
                 //get the remote host from the request
                 String remoteHost = extractClientHostname(request);
                 System.out.println("Remote Host: " + remoteHost);
-                
+
                 //save the data
                 linkService.increaseCount(id);
                 dataLinkService.saveDataLink(userAgent, clientIpAddress, linkTrack);

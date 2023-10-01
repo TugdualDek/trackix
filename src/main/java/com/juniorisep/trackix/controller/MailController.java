@@ -15,29 +15,29 @@ public class MailController {
         this.mailService = mailService;
     }
 
-    @GetMapping("/all")
+/*    @GetMapping("/all")
     public Object getAllCampaigns() {
         return mailService.getAllCampaigns();
-    }
+    }*/
 
-    @GetMapping("/all/active")
+/*    @GetMapping("/all/active")
     public Object getAllActiveCampaigns() {
         return mailService.getAllActiveCampaigns();
-    }
+    }*/
 
     @PostMapping("/add")
     public Object addCampaign(@RequestBody MailCreateRequest campaignDto) {
-        return mailService.addCampaign(campaignDto);
+        return mailService.addMailTracker(campaignDto);
     }
 
     @DeleteMapping("/delete/{id}")
     public Object deleteCampaign(@PathVariable("id") int id) {
-        return mailService.deleteCampaign(id);
+        return mailService.deleteMailTrack(id);
     }
 
     @PutMapping("/update/{id}")
     public Object updateCampaign(@PathVariable("id") int id, @RequestBody MailUpdateRequest updateDto) {
-        return mailService.updateCampaign(id, updateDto);
+        return mailService.updateMailTrack(id, updateDto);
     }
 
     @GetMapping("/get/{id}")
@@ -47,7 +47,7 @@ public class MailController {
 
     @GetMapping("/get/{id}/data")
     public Object getCampaignDataById(@PathVariable("id") int id) {
-        return mailService.getCampaignDataById(id);
+        return mailService.getMailTrackDataById(id);
     }
 
     /*@GetMapping("/{id}/generate")

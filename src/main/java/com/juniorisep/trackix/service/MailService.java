@@ -36,25 +36,19 @@ public class MailService {
         return mailRepository.findById(id);
     }
 
-    public Object getAllCampaigns() {
-        return mailRepository.findAll();
-    }
-
-    public Object getAllActiveCampaigns() {
+    /*public Object getAllActiveCampaigns() {
         //get all campaign and remove the inactive ones
         List<MailTrack> mailTracks = mailRepository.findAll();
         mailTracks.removeIf(MailTrack::isFinished);
         return mailTracks;
-    }
+    }*/
 
-    public Object addCampaign(MailCreateRequest campaignDto) {
+    public Object addMailTracker(MailCreateRequest campaignDto) {
 
         //create a new campaign
         MailTrack mailTrack = MailTrack.builder()
                 .name(campaignDto.getName())
                 .description(campaignDto.getDescription())
-                .startDate(new java.util.Date())
-                .isFinished(false)
                 .link("")
                 .count(0)
                 .dataMails(null)
@@ -69,7 +63,7 @@ public class MailService {
 
     }
 
-    public Object deleteCampaign(int id) {
+    public Object deleteMailTrack(int id) {
         //delete the campaign and check if it has been deleted
         if (mailRepository.existsById(id)) {
             mailRepository.deleteById(id);
@@ -79,7 +73,7 @@ public class MailService {
         }
     }
 
-    public Object updateCampaign(int id, MailUpdateRequest updateDto) {
+    public Object updateMailTrack(int id, MailUpdateRequest updateDto) {
 
         //get the campaign
         Optional<MailTrack> campaignOptional = mailRepository.findById(id);
@@ -93,7 +87,6 @@ public class MailService {
             //update the campaign
             mailTrack.setName(updateDto.getName());
             mailTrack.setDescription(updateDto.getDescription());
-            mailTrack.setFinished(updateDto.isFinished());
 
             //save the campaign
             mailRepository.save(mailTrack);
@@ -106,7 +99,7 @@ public class MailService {
 
     }
 
-    public Object getCampaignDataById(int id) {
+    public Object getMailTrackDataById(int id) {
 
         Optional<MailTrack> campaign = mailRepository.findById(id);
 
@@ -126,7 +119,7 @@ public class MailService {
         });
     }
 
-    public Object generateLink(int id) {
+    public void generateLink(int id) {
         Optional<MailTrack> mailTrack = mailRepository.findById(id);
         mailTrack.ifPresent(mailTrack1 -> {
             if (mailTrack1.getName().equals("jisep")) {
@@ -136,6 +129,5 @@ public class MailService {
             }
             mailRepository.save(mailTrack1);
         });
-        return mailTrack;
     }
 }

@@ -1,14 +1,10 @@
 package com.juniorisep.trackix.service;
 
 import com.juniorisep.trackix.model.*;
-import com.juniorisep.trackix.repository.CampaignRepository;
-import com.juniorisep.trackix.repository.GroupRepository;
-import com.juniorisep.trackix.repository.SmtpRepository;
-import com.juniorisep.trackix.repository.TemplateRepository;
+import com.juniorisep.trackix.repository.*;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -29,11 +25,15 @@ public class CampaignService {
     private final GroupRepository groupRepository;
     private final SmtpRepository smtpRepository;
 
-    public CampaignService(CampaignRepository campaignRepository, TemplateRepository templateRepository, GroupRepository groupRepository, SmtpRepository smtpRepository) {
+    private final MailRepository mailRepository;
+    private final String LINK_URL = "http://137.74.196.178:8000";
+
+    public CampaignService(CampaignRepository campaignRepository, TemplateRepository templateRepository, GroupRepository groupRepository, SmtpRepository smtpRepository, MailRepository mailRepository) {
         this.campaignRepository = campaignRepository;
         this.templateRepository = templateRepository;
         this.groupRepository = groupRepository;
         this.smtpRepository = smtpRepository;
+        this.mailRepository = mailRepository;
     }
 
     public JavaMailSender configureJavaMailSender(Campaign campaign) {
@@ -79,12 +79,23 @@ public class CampaignService {
                 .completedDate(null)
                 .template(template)
                 .groups(groups)
-                .results(null)
                 .status("En attente")
                 .smtp(smtp)
                 .build();
 
+        MailTrack mailTrack = MailTrack.builder()
+                .name(campaignDto.getName())
+                .link(LINK_URL + "/track/mail/" + campaign.getId() + "/image.png")
+                .count(0)
+                .dataMails(null)
+                .campaign(campaign)
+                .build();
+
+        campaign.setMailTrack(mailTrack);
+
+
         campaignRepository.save(campaign);
+        mailRepository.save(mailTrack);
 
         return campaign;
     }
@@ -135,6 +146,10 @@ public class CampaignService {
         helper.setSubject(template.getSubject());
         helper.setReplyTo(new InternetAddress(smtp.getFromAddress()));
 
+        //get the mailtracker from the campaign
+        MailTrack mailTrack = campaign.getMailTrack();
+        String link = mailTrack.getLink();
+
         //send the campaign
         for (Target recipient : recipients) {
 
@@ -143,6 +158,10 @@ public class CampaignService {
             htmlBody = htmlBody.replace("{{user.firstName}}", recipient.getFirstName());
             htmlBody = htmlBody.replace("{{user.lastName}}", recipient.getLastName());
             htmlBody = htmlBody.replace("{{user.email}}", recipient.getEmail());
+
+            // i have also {{mail.tracking}} in my template. But it is in a p tag, and i want to replace it with an image tag. How can i do that?
+
+            htmlBody = htmlBody.replace("{{mail.tracking}}", "<img src=\"" + link + "\"/>");
 
             helper.setText(htmlBody, true);
 
