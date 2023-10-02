@@ -1,6 +1,5 @@
 package com.juniorisep.trackix.controller;
 
-import com.juniorisep.trackix.dto.MailRequest;
 import com.juniorisep.trackix.model.LinkTrack;
 import com.juniorisep.trackix.model.MailTrack;
 import com.juniorisep.trackix.service.DataLinkService;
